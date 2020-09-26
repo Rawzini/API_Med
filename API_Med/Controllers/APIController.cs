@@ -53,5 +53,39 @@ namespace API_Med.Controllers
             }
             return NotFound();
         }
+
+        [HttpPut("bind/{evId}/{apId}")]
+        public ActionResult<Event> BindAppointmentToEvent(int evId, int apId)
+        {
+            var eventToBind = _repository.FindEventById(evId);
+            var appointmentToBind = _repository.FindAppointmentById(apId);
+            if (eventToBind == null || appointmentToBind == null)
+            {
+                return NotFound();
+            }
+            if (eventToBind.ServiceId != appointmentToBind.ServiceId)
+            { 
+                return ValidationProblem();
+            }
+            eventToBind.AppointmentId = apId;
+
+            _repository.BindAppointmentToEvent(eventToBind);
+
+            _repository.SaveChanges();
+
+            return eventToBind;
+        }
+
+        [HttpGet("event/{id}")]
+        public ActionResult<Event> FindEventById(int id)
+        {
+            var APIItems = _repository.FindEventById(id);
+
+            if (APIItems != null)
+            {
+                return Ok(APIItems);
+            }
+            return NotFound();
+        }
     }
 }

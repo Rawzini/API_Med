@@ -18,26 +18,39 @@ namespace API_Med.Data
         {
             _context = context;
         }
-        public void BindAppointmentToEvent(Appointment Apnmnt)
+
+        public Event FindEventById(int eventId)
         {
-            throw new NotImplementedException();
+            return _context.Event.FirstOrDefault(e => e.Id == eventId);
+        }
+
+        public Appointment FindAppointmentById(int appointmentId)
+        {
+            return _context.Appointment.FirstOrDefault(a => a.Id == appointmentId);
+        }
+
+        public void BindAppointmentToEvent(Event ev)
+        {
+            //
         }
 
         public ClosestDateView GetClosestDateView(int id)
         {
-            var AppointmentsList = _context.Appointment.Where(i => i.PatientId == id).ToArray();
+            var appointmentsList = _context.Appointment.Where(i => i.PatientId == id).ToArray();
 
             IEnumerable<Event> eventList = _context.Event.ToArray();
             var groups = eventList.Where(z => z.AppointmentId == null).GroupBy(x => x.DateTime.Date);
             
             for (var j = 0; j < groups.Count(); j++)
             {
-                for (var i = 0; i < AppointmentsList.Length; i++)
+                for (var i = 0; i < appointmentsList.Length; i++)
                 {
-                   if (!groups.ElementAt(j).Select(x => x.ServiceId).Contains(AppointmentsList[i].ServiceId)) goto goto1;
+                   if (!groups.ElementAt(j).Select(x => x.ServiceId).Contains(appointmentsList[i].ServiceId)) goto goto1;
                 }
                 var freeDate = groups.ElementAt(j).Key;
-                var freeEvents = _context.Event.Where(d => d.DateTime.Date == groups.ElementAt(j).Key.Date && d.AppointmentId == null).ToList();
+                var freeEvents = _context.Event
+                    .Include(a => a.Service)
+                    .Where(d => d.DateTime.Date == groups.ElementAt(j).Key.Date && d.AppointmentId == null).ToList();
                 return new ClosestDateView { DateTime = freeDate, Events = freeEvents };
             goto1: continue;
             }
