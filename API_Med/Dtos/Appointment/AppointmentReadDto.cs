@@ -1,33 +1,35 @@
-﻿using System;
+﻿using API_Med.Dtos.Event;
+using API_Med.Dtos.Patient;
+using API_Med.Dtos.Service;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace API_Med.Models
+namespace API_Med.Dtos.Appointment
 {
-    public class Appointment
+    public class AppointmentReadDto
     {
-        [Key]
         public int Id { get; set; }
 
-        [Required]
         public int PatientId { get; set; }
 
-        [Required]
         public int ServiceId { get; set; }
 
 
         [ForeignKey("ServiceId")]
-        public Service Service { get; set; }
+        public ServiceReadDto Service { get; set; }
 
         [ForeignKey("PatientId")]
-        public Patient Patient { get; set; }
+        public PatientReadDto Patient { get; set; }
 
-        public List<Event> Events { get; set; }
-
+        /*
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public List<EventReadDto> Events { get; set; }
+        */
     }
 }

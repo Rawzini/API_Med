@@ -1,32 +1,31 @@
-﻿using System;
+﻿using API_Med.Dtos.Appointment;
+using API_Med.Dtos.Service;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace API_Med.Models
+namespace API_Med.Dtos.Event
 {
-    public class Event
+    public class EventReadDto
     {
-        [Key]
         public int Id { get; set; }
 
-        //[DataType(DataType.DateTime)]
-        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}", ApplyFormatInEditMode = true)]
-        [Required]
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}", ApplyFormatInEditMode = true)]
         public DateTime DateTime { get; set; }
 
-        [Required]
         public int ServiceId { get; set; }
-
+        
         public int? AppointmentId { get; set; }
 
 
         [ForeignKey("ServiceId")]
-        public Service Service { get; set; }
+        public ServiceReadDto Service { get; set; }
 
         [ForeignKey("AppointmentId")]
-        public Appointment Appointment { get; set; }
+        public AppointmentReadDto Appointment { get; set; }
     }
 }

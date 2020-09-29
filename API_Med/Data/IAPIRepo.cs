@@ -12,9 +12,9 @@ namespace API_Med.Data
 
         IEnumerable<Appointment> GetUnattachedAppointmentsByName(string name);
         IEnumerable<Appointment> GetUnattachedAppointmentsById(int id);
-        ClosestDateView GetClosestDateView(int id);
+        ClosestDateView GetClosestSuitableDate(int id);
         void BindAppointmentToEvent(Event ev);
-        Event FindEventById(int eventId);
+        Event GetEventById(int eventId);
         Appointment FindAppointmentById(int appointmentId);
     }
 }

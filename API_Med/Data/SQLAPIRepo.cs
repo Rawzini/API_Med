@@ -19,7 +19,7 @@ namespace API_Med.Data
             _context = context;
         }
 
-        public Event FindEventById(int eventId)
+        public Event GetEventById(int eventId)
         {
             return _context.Event.FirstOrDefault(e => e.Id == eventId);
         }
@@ -34,7 +34,7 @@ namespace API_Med.Data
             //
         }
 
-        public ClosestDateView GetClosestDateView(int id)
+        public ClosestDateView GetClosestSuitableDate(int id)
         {
             var appointmentsList = _context.Appointment.Where(i => i.PatientId == id).ToArray();
 

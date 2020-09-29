@@ -1,22 +1,23 @@
-﻿using System;
+﻿using API_Med.Dtos.Appointment;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace API_Med.Models
+namespace API_Med.Dtos.Patient
 {
-    public class Patient
+    public class PatientReadDto
     {
-        [Key]
         public int Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
-
-        public List<Appointment> Appointments { get; set; }
+        /*
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public List<AppointmentReadDto> Appointments { get; set; }
+       */
     }
 }
