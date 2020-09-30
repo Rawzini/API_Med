@@ -2,16 +2,12 @@
 using API_Med.Dtos;
 using API_Med.Dtos.Appointment;
 using API_Med.Dtos.Event;
-using API_Med.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace API_Med.Controllers
@@ -37,6 +33,7 @@ namespace API_Med.Controllers
         }
 
         //GET api/
+        //Возвращает список всех доступных маршрутов, которые обрабатывает контроллер
         [HttpGet]
         public IActionResult GetAllRoutes()
         {
@@ -50,6 +47,7 @@ namespace API_Med.Controllers
         }
 
         //GET api/id/{id}
+        //Возвращает список всех назначений пациента (по id), не привязанных к расписанию 
         [HttpGet("id/{id}")]
         public ActionResult<IEnumerable<AppointmentReadDto>> GetUnattachedAppointmentsById(int id)
         {
@@ -68,6 +66,7 @@ namespace API_Med.Controllers
         }
 
         //GET api/name/{name}
+        //Возвращает список всех назначений пациента (по имени), не привязанных к расписанию
         [HttpGet("name/{name}")]
         public ActionResult<AppointmentReadDto> GetUnattachedAppointmentsByName(string name)
         {
@@ -85,6 +84,7 @@ namespace API_Med.Controllers
         }
 
         //GET api/closest/{id}
+        //Возвращает дату в которую пациент может пройти все назначенные процедуры и список всех доступных в этот день процедур
         [HttpGet("closest/{id}")]
         public ActionResult<ClosestDateViewReadDto> GetClosestSuitableDate(int id)
         {
@@ -102,7 +102,8 @@ namespace API_Med.Controllers
             return NotFound();
         }
 
-        //GET api/bind/{evId}/{apId}
+        //PUT api/bind/{evId}/{apId}
+        //Привязывает назначение пациента к расписанию
         [HttpPut("bind/{evId}/{apId}")]
         public ActionResult<EventReadDto> BindAppointmentToEvent(int evId, int apId)
         {
@@ -131,6 +132,7 @@ namespace API_Med.Controllers
         }
 
         //GET api/event/{id}
+        //Возвращает ячейку расписания (по id)
         [HttpGet("event/{id}")]
         public ActionResult<EventReadDto> GetEventById(int id)
         {

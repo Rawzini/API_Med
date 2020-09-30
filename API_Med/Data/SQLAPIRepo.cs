@@ -19,27 +19,14 @@ namespace API_Med.Data
             _context = context;
         }
 
-        public Event GetEventById(int eventId)
-        {
-            return _context.Event
-                .Include(a => a.Service)
-                .Include(a => a.Appointment)
-                .FirstOrDefault(e => e.Id == eventId);
-        }
-
-        public Appointment GetAppointmentById(int appointmentId)
-        {
-            return _context.Appointment
-                .Include(a => a.Service)
-                .Include(a => a.Patient)
-                .FirstOrDefault(a => a.Id == appointmentId);
-        }
-
+        //Обновляет данные в таблице расписания
         public void BindAppointmentToEvent(Event ev)
         {
             //
         }
 
+        //Возвращает представление состоящее из даты, в которую пациент может пройти все назначенные процедуры
+        //и список всех доступных в этот день процедур
         public ClosestDateView GetClosestSuitableDate(int id)
         {
             var appointmentsList = _context.Appointment.Where(i => i.PatientId == id).ToArray();
@@ -67,6 +54,7 @@ namespace API_Med.Data
             return null;
         }
 
+        //Возвращает список записей из таблицы назначения, привязанную к ней процедуру и пациента (по id пациента)
         public IEnumerable<Appointment> GetUnattachedAppointmentsById(int id)
         {
             var ServiseIds = _context.Event.Select(i => i.AppointmentId).ToArray();
@@ -77,6 +65,7 @@ namespace API_Med.Data
                 .ToList();
         }
 
+        //Возвращает список записей из таблицы назначения, привязанную к ней процедуру и пациента (по имени пациента)
         public IEnumerable<Appointment> GetUnattachedAppointmentsByName(string name)
         {
             var ServiseIds = _context.Event.Select(i => i.AppointmentId).ToArray();
@@ -87,6 +76,24 @@ namespace API_Med.Data
                 .Where(a => !ServiseIds.Contains(a.Id) && a.Patient.Name == EncodedName)
                 .ToList();
 
+        }
+
+        //Возвращает запись из таблицы расписания, привязанную к ней процедуру и назначение (по id)
+        public Event GetEventById(int eventId)
+        {
+            return _context.Event
+                .Include(a => a.Service)
+                .Include(a => a.Appointment)
+                .FirstOrDefault(e => e.Id == eventId);
+        }
+
+        //Возвращает запись из таблицы назначения, привязанную к ней процедуру и пациента (по id)
+        public Appointment GetAppointmentById(int appointmentId)
+        {
+            return _context.Appointment
+                .Include(a => a.Service)
+                .Include(a => a.Patient)
+                .FirstOrDefault(a => a.Id == appointmentId);
         }
 
         public bool SaveChanges()

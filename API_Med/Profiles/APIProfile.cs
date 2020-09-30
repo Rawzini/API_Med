@@ -28,8 +28,6 @@ namespace API_Med.Profiles
             CreateMap<Service, ServiceReadDto>();
 
             CreateMap<ClosestDateView, ClosestDateViewReadDto>().ForMember(m => m.Events, o => o.MapFrom(e => e.Events));
-
-            CreateMap<Event, EventUpdateDto>();
         }
     }
 }
