@@ -15,6 +15,6 @@ namespace API_Med.Data
         ClosestDateView GetClosestSuitableDate(int id);
         void BindAppointmentToEvent(Event ev);
         Event GetEventById(int eventId);
-        Appointment FindAppointmentById(int appointmentId);
+        Appointment GetAppointmentById(int appointmentId);
     }
 }

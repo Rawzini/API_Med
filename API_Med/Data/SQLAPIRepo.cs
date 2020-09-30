@@ -21,12 +21,18 @@ namespace API_Med.Data
 
         public Event GetEventById(int eventId)
         {
-            return _context.Event.FirstOrDefault(e => e.Id == eventId);
+            return _context.Event
+                .Include(a => a.Service)
+                .Include(a => a.Appointment)
+                .FirstOrDefault(e => e.Id == eventId);
         }
 
-        public Appointment FindAppointmentById(int appointmentId)
+        public Appointment GetAppointmentById(int appointmentId)
         {
-            return _context.Appointment.FirstOrDefault(a => a.Id == appointmentId);
+            return _context.Appointment
+                .Include(a => a.Service)
+                .Include(a => a.Patient)
+                .FirstOrDefault(a => a.Id == appointmentId);
         }
 
         public void BindAppointmentToEvent(Event ev)
@@ -37,22 +43,25 @@ namespace API_Med.Data
         public ClosestDateView GetClosestSuitableDate(int id)
         {
             var appointmentsList = _context.Appointment.Where(i => i.PatientId == id).ToArray();
-
-            IEnumerable<Event> eventList = _context.Event.ToArray();
+            var eventList = _context.Event.ToArray();
             var groups = eventList.Where(z => z.AppointmentId == null).GroupBy(x => x.DateTime.Date);
             
             for (var j = 0; j < groups.Count(); j++)
             {
                 for (var i = 0; i < appointmentsList.Length; i++)
                 {
-                   if (!groups.ElementAt(j).Select(x => x.ServiceId).Contains(appointmentsList[i].ServiceId)) goto goto1;
+                   if (!groups.ElementAt(j).Select(x => x.ServiceId).Contains(appointmentsList[i].ServiceId)) goto end_for_with_index_j;
                 }
+
                 var freeDate = groups.ElementAt(j).Key;
                 var freeEvents = _context.Event
                     .Include(a => a.Service)
-                    .Where(d => d.DateTime.Date == groups.ElementAt(j).Key.Date && d.AppointmentId == null).ToList();
+                    .Where(d => d.DateTime.Date == groups.ElementAt(j).Key.Date && d.AppointmentId == null)
+                    .ToList();
+
                 return new ClosestDateView { DateTime = freeDate, Events = freeEvents };
-            goto1: continue;
+
+            end_for_with_index_j: continue;
             }
 
             return null;

@@ -19,12 +19,17 @@ namespace API_Med.Profiles
             CreateMap<Appointment, AppointmentReadDto>().IncludeMembers(m => m.Service, m => m.Patient);
             CreateMap<Service, AppointmentReadDto>(MemberList.None).ForMember(m => m.ServiceId, o => o.MapFrom(x => x.Id));
             CreateMap<Patient, AppointmentReadDto>(MemberList.None).ForMember(m => m.PatientId, o => o.MapFrom(x => x.Id));
+
             CreateMap<Event, EventReadDto>().IncludeMembers(m => m.Appointment, m => m.Service);
             CreateMap<Appointment, EventReadDto>(MemberList.None).ForMember(m => m.AppointmentId, o => o.MapFrom(x => x.Id));
             CreateMap<Service, EventReadDto>(MemberList.None).ForMember(m => m.ServiceId, o => o.MapFrom(x => x.Id));
+
             CreateMap<Patient, PatientReadDto>();
             CreateMap<Service, ServiceReadDto>();
+
             CreateMap<ClosestDateView, ClosestDateViewReadDto>().ForMember(m => m.Events, o => o.MapFrom(e => e.Events));
+
+            CreateMap<Event, EventUpdateDto>();
         }
     }
 }
